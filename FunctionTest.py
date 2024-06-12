@@ -1,5 +1,4 @@
-
-import ApogeeRaiseFunc as ff # Replace FunctionFile with the name of your file
+import ApogeeRaiseFunc as ff
 
 
 
