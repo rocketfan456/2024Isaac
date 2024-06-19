@@ -105,22 +105,22 @@ class TankSet:
         
         # Propellant Density switch case
         if strPropType=="Oxygen":
-            rhoProp =      # Density of propellant (kg/m3)
+            rhoProp = 1140     # Density of propellant (kg/m3)
         elif strPropType=="Hydrogen":
-            rhoProp = 
+            rhoProp = 70
         elif strPropType == "Methane":
-            rhoProp = 
+            rhoProp = 420
         elif strPropType == "MMH":
-            rhoProp = 
+            rhoProp = 866
         elif strPropType == "NTO":
-            rhoProp = 
+            rhoProp = 1450
         elif strPropType == "RP-1":
-            rhoProp = 
+            rhoProp = 820
         
         
         # Calculate propellant volume and volume per tank (include ullage)
-        volPropTotal    = 
-        volPropPerTank  = 
+        volPropTotal    = mPropTotal/rhoProp
+        volPropPerTank  = volPropTotal/nTanks
         volPerTank      = volPropPerTank*(1+pctUllage)
         
         # Compare volume of tank to maximum allowable for given radius
@@ -140,29 +140,29 @@ class TankSet:
             lCylTank    = (volPerTank-4/3*np.pi*(lRadiusTank**3))/(np.pi*lRadiusTank**2)
        
         # Calculate the total length of the tank 
-        lTankLength = 
+        lTankLength = 2*lRadiusTank + lCylTank
         
         # Calculate the surface area of each portion of the tank
         saDomesPerTank   = 4*np.pi*lRadiusTank**2
         saCylinderPerTank = 2*np.pi*lRadiusTank*lCylTank
-        saTotalPerTank   = 
+        saTotalPerTank   = saDomesPerTank + saCylinderPerTank
        
         # Calculate the thickness.  Start with pressure
         presTotal = fosMat*(presTank + rhoProp*aMax*lTankLength)
-        thkDomesCalc  = 
+        thkDomesCalc  = (presTotal*lRadiusTank)/(2*sigMat)
         thkCylCalc    = 2*thkDomesCalc
         
         # Compare the pressure thickness to the minimum thickness
         thkDomes  = max(thkDomesCalc,thkMin)
-        thkCyl    = 
+        thkCyl    = max(thkCylCalc, thkMin)
 
         # Calculate the volume of the material
         volMatDomesPerTank = thkDomes*saDomesPerTank
-        volMatCylPerTank   = 
+        volMatCylPerTank   = thkCyl*saCylinderPerTank
         
         # Calculate the mass of each tank
         mDomesPerTank = volMatDomesPerTank*rhoMat
-        mCylPerTank   = 
+        mCylPerTank   = volMatCylPerTank*rhoMat
         
         # Add in the fudge factor 
         mTotalPerTank = 
