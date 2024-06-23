@@ -6,7 +6,7 @@ Created on Sun Dec 13 19:26:02 2020
 """
 
 import unittest
-import Classes_HW5 as cf
+import MissionClasses as cf
 import numpy as np
 
 class TestApogee(unittest.TestCase):
