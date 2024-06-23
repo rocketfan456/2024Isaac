@@ -215,46 +215,46 @@ class Subsystems:
         pctMargin           = 0.15 # mass margin percentage
         
         # Avionics
-        mAvionics =
+        mAvionics = 8*(mVehicleStart**0.361)
         
         # Electrical Subsystem      
         if strLanderSize =='Small':
-            mPowerConversion = 
-            pwrDrawLander    =  # W
+            mPowerConversion = 30 # kg
+            pwrDrawLander    = 300 # W
         else:
             mPowerConversion = 50
             pwrDrawLander    = 1200
         
         if strArrayType == 'Body':
-            pwrdenArray =  # w/kg
+            pwrdenArray = 30 # w/kg
         else: 
-            pwrdenArray =  # w/kg
+            pwrdenArray = 75 # w/kg
         
-        lTank = max() # pick the maximum length of your clsOxTankSet.lTankLength and clsFuelTankSet.lTanklength
-        mWiring   = 
+        lTank = max(clsOxTankSet.lTankLength) + max(clsFuelTankSet.lTanklength) # pick the maximum length of your clsOxTankSet.lTankLength and clsFuelTankSet.lTanklength
+        mWiring   = 1.058*np.sqrt(mVehicleStart)*(ltank**0.25)
         
-        pwrTotalMargined = (1+pctMarginArray)*()#the parenthesis is the sum of lander power and payload power
-        mSolarArray      = #divide the total margined power by the density 
+        pwrTotalMargined = (1+pctMarginArray)*(pwrDrawLander+pwrDrawPayload) #the parenthesis is the sum of lander power and payload power
+        mSolarArray      = pwrTotalMargined/pwrdenArray #divide the total margined power by the density 
         
-        nrgTotal       = 
-        nrgTotalMargin = 
-        mBattery       = 
+        nrgTotal       = pwrTotalMargined*tBattery
+        nrgTotalMargin = nrgTotal/(1-pctDepthOfDischarge)
+        mBattery       = nrgTotalMargin/nrgdenBattery
         
         mElectrical = mPowerConversion+mWiring + mSolarArray + mBattery
         
         # Propulsion
         if strLanderSize =='Small':
-            mRCS = 
-            mPressurization = 
-            mFeedlines = 
+            mRCS = 20 #kg
+            mPressurization = 50 #kg
+            mFeedlines = 20 #kg
         else:
-            mRCS = 
-            mPressurization = 
-            mFeedlines = 
+            mRCS = 50 #kg
+            mPressurization = 100 #kg
+            mFeedlines = 50 #kg
             
         if clsOxTankSet.strPropType == 'Oxygen':
-            mSOFIOx = 
-            mMLIOx  = 
+            mSOFIOx = thkSOFI*clsOxTankSet.saTotalPerTank*clsOxTankSet.nTanks*rhoSOFI
+            mMLIOx  = thkMLI*clsOxTankSet.saTotalPerTank*clsOxTankSet.nTanks*rhoMLI
         else:
             mSOFIOx = 0
             mMLIOx  = thkMLI*clsOxTankSet.saTotalPerTank*clsOxTankSet.nTanks*rhoMLI
@@ -262,58 +262,58 @@ class Subsystems:
         if clsFuelTankSet.strPropType == 'Hydrogen':
             mSOFIFuel = thkSOFI*clsFuelTankSet.saTotalPerTank*clsFuelTankSet.nTanks*rhoSOFI
             mMLIFuel  = thkMLI*clsFuelTankSet.saTotalPerTank*clsFuelTankSet.nTanks*rhoMLI
-            twEngine  = 
+            twEngine  = 40
         elif clsFuelTankSet.strPropType == 'Methane':
-            mSOFIFuel = 
-            mMLIFuel  = 
-            twEngine = 
+            mSOFIFuel = thkSOFI*clsFuelTankSet.saTotalPerTank*clsFuelTankSet.nTanks*rhoSOFI
+            mMLIFuel  = thkMLI*clsFuelTankSet.saTotalPerTank*clsFuelTankSet.nTanks*rhoMLI
+            twEngine = 50
         elif clsFuelTankSet.strPropType == 'MMH':
-            mSOFIFuel = 
-            mMLIFuel  = 
-            twEngine = 
+            mSOFIFuel = 0
+            mMLIFuel  = thkMLI*clsFuelTankSet.saTotalPerTank*clsFuelTankSet.nTanks*rhoMLI
+            twEngine = 50
         elif clsFuelTankSet.strPropType == 'RP-1':
             mSOFIFuel = 0
-            mMLIFuel  = 
-            twEngine  = 
+            mMLIFuel  = thkMLI*clsFuelTankSet.saTotalPerTank*clsFuelTankSet.nTanks*rhoMLI
+            twEngine  = 60
         
         mEngine = 1/(twEngine/clsEng.thrust)/9.81
 
-        mPropulsion = 
+        mPropulsion = mRCS + mPressurization + mFeedlines + mSOFIFuel + mMLIFuel + mEngine
 
         # Thermal
-        mThermal = 
+        mThermal = 0.03 * mVehicleStart
         
         # Structure
         mDryWithoutStructure = mAvionics + mElectrical + mPropulsion + mThermal 
         mStructureAndGear    = mDryWithoutStructure/(1-(pctStructure+pctLandingGear) )*(pctStructure+pctLandingGear)
         
         mTotalBasic     = mDryWithoutStructure + mStructureAndGear
-        mMGA            = 
-        mTotalPredicted = 
-        mMargin         = 
-        mTotalAllowable = 
+        mMGA            = mTotalBasic * pctMGA
+        mTotalPredicted = mTotalBasic + mMGA
+        mMargin         = mTotalBasic * pctMargin
+        mTotalAllowable = mTotalPredicted + mMargin
         
             
-        self.mAvionics         = 
-        self.mWiring           = 
-        self.pwrTotalMargined  = 
-        self.mSolarArray       = 
-        self.nrgTotal          = 
-        self.nrgTotalMargin    = 
-        self.mBattery          = 
-        self.mElectrical       = 
-        self.mSOFIOx           = 
-        self.mSOFIFuel         = 
-        self.mMLIOx            = 
-        self.mMLIFuel          = 
-        self.twEngine          = 
-        self.mEngine           = 
-        self.mPropulsion       = 
-        self.mThermal          = 
-        self.mDryWithoutStructure = 
-        self.mStructureAndGear = 
-        self.mTotalBasic       = 
-        self.mMGA              = 
-        self.mMargin           = 
-        self.mTotalPredicted   = 
-        self.mTotalAllowable   = 
+        self.mAvionics         = mAvionics
+        self.mWiring           = mWiring
+        self.pwrTotalMargined  = pwrTotalMargined
+        self.mSolarArray       = mSolarArray
+        self.nrgTotal          = nrgTotal
+        self.nrgTotalMargin    = nrgTotalMargin
+        self.mBattery          = mBattery
+        self.mElectrical       = mElectrical
+        self.mSOFIOx           = mSOFIOx
+        self.mSOFIFuel         = mSOFIFuel
+        self.mMLIOx            = mMLIOx
+        self.mMLIFuel          = mMLIFuel
+        self.twEngine          = twEngine
+        self.mEngine           = mEngine
+        self.mPropulsion       = mPropulsion
+        self.mThermal          = mThermal
+        self.mDryWithoutStructure = mDryWithoutStructure
+        self.mStructureAndGear = mStructureAndGear
+        self.mTotalBasic       = mTotalBasic
+        self.mMGA              = mMGA
+        self.mMargin           = mMargin
+        self.mTotalPredicted   = mTotalPredicted
+        self.mTotalAllowable   = mTotalAllowable
