@@ -261,7 +261,7 @@ class Subsystems:
         nrgTotalMargin = nrgTotal/(1-pctDepthOfDischarge)
         mBattery       = nrgTotalMargin/nrgdenBattery
         
-        mElectrical = mPowerConversion+mWiring + mSolarArray + mBattery
+        mElectrical = mPowerConversion + mWiring + mSolarArray + mBattery
         
         # Propulsion
         if strLanderSize =='Small':
@@ -299,7 +299,7 @@ class Subsystems:
         
         mEngine = 1/(twEngine/clsEng.thrust)/9.81
 
-        mPropulsion = mRCS + mPressurization + mFeedlines + mSOFIFuel + mMLIFuel + mEngine
+        mPropulsion = mRCS + mPressurization + mFeedlines + mSOFIOx + mMLIOx + mSOFIFuel + mMLIFuel + mEngine
 
         # Thermal
         mThermal = 0.03 * mVehicleStart
