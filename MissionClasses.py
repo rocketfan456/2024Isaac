@@ -199,3 +199,121 @@ class TankSet:
         self.mCylPerTank     = mCylPerTank
         self.mTotalPerTank   = mTotalPerTank
         self.mTotal          = mTotal
+
+class Subsystems:
+    def __init__(self, mVehicleStart, clsEng, clsOxTankSet,clsFuelTankSet, pwrDrawPayload, strArrayType, strLanderSize, tBattery):
+        pctMarginArray      = 0.30
+        pctDepthOfDischarge = 0.30
+        nrgdenBattery       = 100 # w-hr/kg
+        rhoSOFI             = 50 # Foam insulation density (kg/m3)
+        thkSOFI             = 0.005 # Foam insulation thickness (m)
+        rhoMLI              = 80 # multi-layer insulation density (kg/m3)
+        thkMLI              = 0.001 # multi-layer insulation thickness (m)
+        pctLandingGear      = 0.08
+        pctStructure        = 0.20
+        pctMGA              = 0.15 # mass growth allowance
+        pctMargin           = 0.15 # mass margin percentage
+        
+        # Avionics
+        mAvionics =
+        
+        # Electrical Subsystem      
+        if strLanderSize =='Small':
+            mPowerConversion = 
+            pwrDrawLander    =  # W
+        else:
+            mPowerConversion = 50
+            pwrDrawLander    = 1200
+        
+        if strArrayType == 'Body':
+            pwrdenArray =  # w/kg
+        else: 
+            pwrdenArray =  # w/kg
+        
+        lTank = max() # pick the maximum length of your clsOxTankSet.lTankLength and clsFuelTankSet.lTanklength
+        mWiring   = 
+        
+        pwrTotalMargined = (1+pctMarginArray)*()#the parenthesis is the sum of lander power and payload power
+        mSolarArray      = #divide the total margined power by the density 
+        
+        nrgTotal       = 
+        nrgTotalMargin = 
+        mBattery       = 
+        
+        mElectrical = mPowerConversion+mWiring + mSolarArray + mBattery
+        
+        # Propulsion
+        if strLanderSize =='Small':
+            mRCS = 
+            mPressurization = 
+            mFeedlines = 
+        else:
+            mRCS = 
+            mPressurization = 
+            mFeedlines = 
+            
+        if clsOxTankSet.strPropType == 'Oxygen':
+            mSOFIOx = 
+            mMLIOx  = 
+        else:
+            mSOFIOx = 0
+            mMLIOx  = thkMLI*clsOxTankSet.saTotalPerTank*clsOxTankSet.nTanks*rhoMLI
+
+        if clsFuelTankSet.strPropType == 'Hydrogen':
+            mSOFIFuel = thkSOFI*clsFuelTankSet.saTotalPerTank*clsFuelTankSet.nTanks*rhoSOFI
+            mMLIFuel  = thkMLI*clsFuelTankSet.saTotalPerTank*clsFuelTankSet.nTanks*rhoMLI
+            twEngine  = 
+        elif clsFuelTankSet.strPropType == 'Methane':
+            mSOFIFuel = 
+            mMLIFuel  = 
+            twEngine = 
+        elif clsFuelTankSet.strPropType == 'MMH':
+            mSOFIFuel = 
+            mMLIFuel  = 
+            twEngine = 
+        elif clsFuelTankSet.strPropType == 'RP-1':
+            mSOFIFuel = 0
+            mMLIFuel  = 
+            twEngine  = 
+        
+        mEngine = 1/(twEngine/clsEng.thrust)/9.81
+
+        mPropulsion = 
+
+        # Thermal
+        mThermal = 
+        
+        # Structure
+        mDryWithoutStructure = mAvionics + mElectrical + mPropulsion + mThermal 
+        mStructureAndGear    = mDryWithoutStructure/(1-(pctStructure+pctLandingGear) )*(pctStructure+pctLandingGear)
+        
+        mTotalBasic     = mDryWithoutStructure + mStructureAndGear
+        mMGA            = 
+        mTotalPredicted = 
+        mMargin         = 
+        mTotalAllowable = 
+        
+            
+        self.mAvionics         = 
+        self.mWiring           = 
+        self.pwrTotalMargined  = 
+        self.mSolarArray       = 
+        self.nrgTotal          = 
+        self.nrgTotalMargin    = 
+        self.mBattery          = 
+        self.mElectrical       = 
+        self.mSOFIOx           = 
+        self.mSOFIFuel         = 
+        self.mMLIOx            = 
+        self.mMLIFuel          = 
+        self.twEngine          = 
+        self.mEngine           = 
+        self.mPropulsion       = 
+        self.mThermal          = 
+        self.mDryWithoutStructure = 
+        self.mStructureAndGear = 
+        self.mTotalBasic       = 
+        self.mMGA              = 
+        self.mMargin           = 
+        self.mTotalPredicted   = 
+        self.mTotalAllowable   = 
