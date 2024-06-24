@@ -299,7 +299,7 @@ class Subsystems:
         
         mEngine = 1/(twEngine/clsEng.thrust)/9.81
 
-        mPropulsion = mRCS + mPressurization + mFeedlines + mSOFIOx + mMLIOx + mSOFIFuel + mMLIFuel + mEngine
+        mPropulsion = mRCS + mPressurization + mFeedlines + mSOFIOx + mMLIOx + mSOFIFuel + mMLIFuel + mEngine + clsOxTankSet.mTotal + clsFuelTankSet.mTotal 
 
         # Thermal
         mThermal = 0.03 * mVehicleStart
