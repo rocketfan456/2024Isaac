@@ -455,8 +455,8 @@ class Subsystems:
         mEngine = 1/(twEngine/clsEng.thrust)/9.81
 
         # Uncomment these two lines - note the addition of the clsMonoTankSet.mTotal variable
-        #mPropulsion = mRCS + mPressurization + mFeedlines + mSOFIOx + mMLIOx + mSOFIFuel + mMLIFuel + mEngine \
-        #    + clsOxTankSet.mTotal + clsFuelTankSet.mTotal + clsMonoTankSet.mTotal
+        mPropulsion = mRCS + mPressurization + mFeedlines + mSOFIOx + mMLIOx + mSOFIFuel + mMLIFuel + mEngine \
+            + clsOxTankSet.mTotal + clsFuelTankSet.mTotal + clsMonoTankSet.mTotal
 
         # Thermal
         mThermal = 0.03*mVehicleStart
@@ -498,10 +498,10 @@ class Subsystems:
         
 class Cost:
     def __init__(self,mDryMass, thrEngine, cstRocket):
-        costRELander = 
+        costRELander = 30e6*(mDryMass/2000)**0.4
         costNRELander = 12*costRELander
-        costNREEngine  = 
-        costNRETotal  = # Lander + Engine + Rocket
+        costNREEngine  = 2500*(thrEngine)
+        costNRETotal  = costRELander + costNRELander + costNREEngine + cstRocket # Lander + Engine + Rocket
         
         self.costRELander  = costRELander
         self.costNRELander = costNRELander
