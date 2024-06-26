@@ -48,11 +48,11 @@ class Phase:
     
         # Move the Impulse propellant into the correct category
         if clsEng.strPropType == "Biprop":
-            mPropImpulseOx = mPropImpulse*(clsEng.mr/(1+clsEng.mr)) # Use mixture ratio to calculate the ox impulse used
+            mPropImpulseOx = mPropImpulse*clsEng.mr/(1+clsEng.mr) # Use mixture ratio to calculate the ox impulse used
             mPropImpulseFuel = mPropImpulse/(1+clsEng.mr) # Use mixture ratio to calculate the fuel impulse used
             
-            mPropImpulseReserveOx = mPropImpulseReserve  # Use the mixture ratio to calculate the ox reserve
-            mPropImpulseReserveFuel = mPropImpulseReserve # Use the mixture ratio to calculate the fuel reserve
+            mPropImpulseReserveOx = mPropImpulseReserve*clsEng.mr/(1+clsEng.mr)  # Use the mixture ratio to calculate the ox reserve
+            mPropImpulseReserveFuel = mPropImpulseReserve/(1+clsEng.mr) # Use the mixture ratio to calculate the fuel reserve
             
             mPropImpulseMono = 0 # this is a biprop engine, so no monoprop use
             mPropImpulseReserveMono = 0 # this is a biprop engine, so no monoprop use
@@ -94,7 +94,7 @@ class Phase:
         
         # Determine final mass        
         # subtract impulse, boiloff, rcs, chill, and settling
-        mEnd = mStart 
+        mEnd = mStart - mPropImpulse - mPropBoiloff - mPropRCS - mChill - mSettling
         
         
         # Move data to class structure to save information
@@ -173,11 +173,11 @@ class MissionSummary:
             mPropBoiloffFuel +=  curPhase.mPropBoiloffFuel
             mPropRCS         +=   curPhase.mPropRCS
             
-            mPropChill       += curPhase.mPropChill
-            mPropChillOx     += curPhase.mPropChillOx
-            mPropChillFuel   += curPhase.mPropChillFuel
+            mPropChill       += curPhase.mChill
+            mPropChillOx     += curPhase.mChillOx
+            mPropChillFuel   += curPhase.mChillFuel
             
-            mPropSettling    += curPhase.mPropSettling
+            mPropSettling    += curPhase.mSettling
 
         # Stuff everything into self    
         mPropConsumedOx   = mPropBoiloffOx + mPropImpulseOx + mPropChillOx # Impulse, boiloff, and chill for oxygen
@@ -501,7 +501,7 @@ class Cost:
         costRELander = 30e6*(mDryMass/2000)**0.4
         costNRELander = 12*costRELander
         costNREEngine  = 2500*(thrEngine)
-        costNRETotal  = costRELander + costNRELander + costNREEngine + cstRocket # Lander + Engine + Rocket
+        costNRETotal  = costNRELander + costNREEngine + cstRocket # Lander + Engine + Rocket
         
         self.costRELander  = costRELander
         self.costNRELander = costNRELander
