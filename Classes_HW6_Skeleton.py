@@ -180,24 +180,24 @@ class MissionSummary:
             mPropSettling    += curPhase.mPropSettling
 
         # Stuff everything into self    
-        mPropConsumedOx   = # Impulse, boiloff, and chill for oxygen
-        mPropConsumedFuel = # Impulse, boiloff, and chill for fuel 
-        mPropConsumedMono = # Impulse, mPropRCS + mPropSettling
+        mPropConsumedOx   = mPropBoiloffOx + mPropImpulseOx + mPropChillOx # Impulse, boiloff, and chill for oxygen
+        mPropConsumedFuel = mPropBoiloffFuel + mPropImpulseFuel + mPropChillFuel # Impulse, boiloff, and chill for fuel 
+        mPropConsumedMono = mPropImpulseMono + mPropRCS + mPropSettling # Impulse, mPropRCS + mPropSettling
         mPropConsumedTotal = mPropConsumedOx + mPropConsumedFuel + mPropConsumedMono
         
         mPropResidualOx    = pctResidual*(mPropConsumedOx+mPropImpulseReserveOx)
-        mPropResidualFuel  = 
-        mPropResidualMono  = 
+        mPropResidualFuel  = pctResidual*(mPropConsumedFuel+mPropImpulseReserveFuel)
+        mPropResidualMono  = pctResidual*(mPropConsumedMono+mPropImpulseReserveMono)
         mPropResidualTotal = mPropResidualOx + mPropResidualFuel + mPropResidualMono
         
-        mPropAtLandingOx    = mPropResidualOx   +mPropImpulseReserveOx
-        mPropAtLandingFuel  = 
-        mPropAtLandingMono  = 
-        mPropAtLandingTotal = 
+        mPropAtLandingOx    = mPropResidualOx+mPropImpulseReserveOx
+        mPropAtLandingFuel  = mPropResidualFuel+mPropImpulseReserveFuel
+        mPropAtLandingMono  = mPropResidualMono+mPropImpulseReserveMono
+        mPropAtLandingTotal = mPropAtLandingOx + mPropAtLandingFuel + mPropAtLandingMono
         
-        mPropTotalOx = # Consumed + left at landing
-        mPropTotalFuel = # Consumed + left at landing
-        mPropTotalMono = # Consumed + left at landing
+        mPropTotalOx = mPropConsumedOx + mPropAtLandingOx # Consumed + left at landing
+        mPropTotalFuel = mPropConsumedFuel + mPropAtLandingFuel # Consumed + left at landing
+        mPropTotalMono = mPropConsumedMono + mPropAtLandingMono # Consumed + left at landing
         mPropTotalTotal = mPropTotalOx + mPropTotalFuel + mPropTotalMono
         
         dvPhase = np.zeros(len(tupPhases))
@@ -207,38 +207,38 @@ class MissionSummary:
         
         
         self.mPropImpulse      = mPropImpulse
-        self.mPropImpulseOx    = 
-        self.mPropImpulseFuel  = 
-        self.mPropImpulseMono  = 
-        self.mPropImpulseReserve = 
-        self.mPropImpulseReserveOx = 
-        self.mPropImpulseReserveFuel = 
-        self.mPropImpulseReserveMono = 
-        self.mPropBoiloff       = 
-        self.mPropBoiloffOx     = 
-        self.mPropBoiloffFuel   = 
-        self.mPropRCS           =     
-        self.mPropChill         = 
-        self.mPropChillOx       = 
-        self.mPropChillFuel     = 
-        self.mPropSettling      = 
-        self.mPropConsumedOx    = 
-        self.mPropConsumedFuel  = 
-        self.mPropConsumedMono  = 
-        self.mPropConsumedTotal = 
-        self.mPropResidualOx    = 
-        self.mPropResidualFuel  = 
-        self.mPropResidualMono  = 
-        self.mPropResidualTotal = 
-        self.mPropAtLandingOx   = 
-        self.mPropAtLandingFuel = 
-        self.mPropAtLandingMono = 
-        self.mPropAtLandingTotal= 
-        self.mPropTotalOx       = 
-        self.mPropTotalFuel     = 
-        self.mPropTotalMono     = 
-        self.mPropTotalTotal    = 
-        self.dvPhase            = 
+        self.mPropImpulseOx    = mPropImpulseOx
+        self.mPropImpulseFuel  = mPropImpulseFuel
+        self.mPropImpulseMono  = mPropImpulseMono
+        self.mPropImpulseReserve = mPropImpulseReserve
+        self.mPropImpulseReserveOx = mPropImpulseReserveOx
+        self.mPropImpulseReserveFuel = mPropImpulseReserveFuel
+        self.mPropImpulseReserveMono = mPropImpulseReserveMono
+        self.mPropBoiloff       = mPropBoiloff
+        self.mPropBoiloffOx     = mPropBoiloffOx
+        self.mPropBoiloffFuel   = mPropBoiloffFuel
+        self.mPropRCS           = mPropRCS
+        self.mPropChill         = mPropChill
+        self.mPropChillOx       = mPropChillOx
+        self.mPropChillFuel     = mPropChillFuel
+        self.mPropSettling      = mPropSettling
+        self.mPropConsumedOx    = mPropConsumedOx
+        self.mPropConsumedFuel  = mPropConsumedFuel
+        self.mPropConsumedMono  = mPropConsumedMono
+        self.mPropConsumedTotal = mPropConsumedTotal
+        self.mPropResidualOx    = mPropResidualOx
+        self.mPropResidualFuel  = mPropResidualFuel
+        self.mPropResidualMono  = mPropResidualMono
+        self.mPropResidualTotal = mPropResidualTotal
+        self.mPropAtLandingOx   = mPropAtLandingOx
+        self.mPropAtLandingFuel = mPropAtLandingFuel
+        self.mPropAtLandingMono = mPropAtLandingMono
+        self.mPropAtLandingTotal= mPropAtLandingTotal
+        self.mPropTotalOx       = mPropTotalOx
+        self.mPropTotalFuel     = mPropTotalFuel
+        self.mPropTotalMono     = mPropTotalMono
+        self.mPropTotalTotal    = mPropTotalTotal
+        self.dvPhase            = dvPhase
 
 
 
