@@ -1,5 +1,5 @@
 import numpy as np
-import MissionClasses as cf
+import Classes_HW6 as cf
 import matplotlib.pyplot as plt
 
 
@@ -42,19 +42,19 @@ for jj, thrust in enumerate(thrSweep):
             TLI         = cf.Phase('TLI',             PreTLIChill.mEnd,   dvReq, engMain,  'Burn',        0, mdotRCS, mdotOxBoiloff, mdotFuelBoiloff)
             CoastToTCM1 = cf.Phase('Coast to TCM1',           TLI.mEnd,       0, engMain, 'Coast', 1*86400, mdotRCS, mdotOxBoiloff, mdotFuelBoiloff)
             # Replace the PHASE_TYPE below with the appropriate string
-            PreTCM1Sett = cf.Phase('Pre-TCM1 Settling',CoastToTCM1.mEnd,      0, engMain, PHASE_TYPE,      0, mdotRCS, mdotOxBoiloff, mdotFuelBoiloff)
+            PreTCM1Sett = cf.Phase('Pre-TCM1 Settling',CoastToTCM1.mEnd,      0, engMain,'Settling',      0, mdotRCS, mdotOxBoiloff, mdotFuelBoiloff)
             PreTCM1Chill= cf.Phase('Pre-TCM1 Chill',  PreTCM1Sett.mEnd,       0, engMain, 'Chill',       0, mdotRCS, mdotOxBoiloff, mdotFuelBoiloff)
             TCM1        = cf.Phase('TCM1',           PreTCM1Chill.mEnd,      20, engMain,  'Burn',        0, mdotRCS, mdotOxBoiloff, mdotFuelBoiloff)
             # Replace the TIME_HERE below with 2 days (i.e. 2*86400)
-            CoastToTCM2 = cf.Phase('Coast to TCM2',          TCM1.mEnd,       0, engMain, 'Coast', TIME_HERE, mdotRCS, mdotOxBoiloff, mdotFuelBoiloff) 
-            TCM2        = cf.Phase('TCM2',            CoastToTCM2.mEnd,       5,  engRCS,  PHASE_TYPE,       0, mdotRCS, mdotOxBoiloff, mdotFuelBoiloff) 
+            CoastToTCM2 = cf.Phase('Coast to TCM2',          TCM1.mEnd,       0, engMain, 'Coast', 2*86400, mdotRCS, mdotOxBoiloff, mdotFuelBoiloff) 
+            TCM2        = cf.Phase('TCM2',            CoastToTCM2.mEnd,       5,  engRCS,  'Burn',       0, mdotRCS, mdotOxBoiloff, mdotFuelBoiloff) 
             # Replace the TIME_HERE below wit 1 day (i.e. 1*86400)
-            CoastToTCM3 = cf.Phase('Coast to TCM3',          TCM2.mEnd,       0, engMain, 'Coast', TIME_HERE, mdotRCS, mdotOxBoiloff, mdotFuelBoiloff)
-            TCM3        = cf.Phase('TCM3',            CoastToTCM3.mEnd,       5,  engRCS,  PHASE_TYPE,        0, mdotRCS, mdotOxBoiloff, mdotFuelBoiloff)
+            CoastToTCM3 = cf.Phase('Coast to TCM3',          TCM2.mEnd,       0, engMain, 'Coast', 1*86400, mdotRCS, mdotOxBoiloff, mdotFuelBoiloff)
+            TCM3        = cf.Phase('TCM3',            CoastToTCM3.mEnd,       5,  engRCS,  'Burn',        0, mdotRCS, mdotOxBoiloff, mdotFuelBoiloff)
             CoastToLOI  = cf.Phase('Coast to LOI',           TCM3.mEnd,       0, engMain, 'Coast', 0.5*86400, mdotRCS, mdotOxBoiloff, mdotFuelBoiloff)
             PreLOISett  = cf.Phase('Pre-LOI Settling', CoastToLOI.mEnd,       0, engMain,'Settling',      0, mdotRCS, mdotOxBoiloff, mdotFuelBoiloff)
             PreLOIChill = cf.Phase('Pre-LOI Chill',    PreLOISett.mEnd,       0, engMain, 'Chill',       0, mdotRCS, mdotOxBoiloff, mdotFuelBoiloff) 
-            LOI         = cf.Phase('LOI',             PreLOIChill.mEnd,     850, engMain,  PHASE_TYPE,       0, mdotRCS, mdotOxBoiloff, mdotFuelBoiloff)
+            LOI         = cf.Phase('LOI',             PreLOIChill.mEnd,     850, engMain,  'Burn',       0, mdotRCS, mdotOxBoiloff, mdotFuelBoiloff)
             CoastToTCM4 = cf.Phase('Coast to TCM4',           LOI.mEnd,       0, engMain, 'Coast', 0.5*86400, mdotRCS, mdotOxBoiloff, mdotFuelBoiloff)
             TCM4        = cf.Phase('TCM4',            CoastToTCM4.mEnd,       5, engRCS,  'Burn',        0, mdotRCS, mdotOxBoiloff, mdotFuelBoiloff)
             CoastToDOI  = cf.Phase('Coast to DOI',           TCM4.mEnd,       0, engMain, 'Coast', 0.5*86400, mdotRCS, mdotOxBoiloff, mdotFuelBoiloff)
@@ -124,8 +124,8 @@ plt.grid()
 plt.xlabel('Start Mass (kg)')
 plt.ylabel('Payload (kg)')
 plt.legend(strLegend)
-plt.savefig('HW2_Payload_vs_Mass.png', dpi=300)
-
+#plt.savefig('HW2_Payload_vs_Mass.png', dpi=300)
+plt.show()
 
 fig1 = plt.figure()
 # Build up the legend string
@@ -137,7 +137,8 @@ plt.grid()
 plt.xlabel('Thrust/Weight Ratio at PDI Start')
 plt.ylabel('Payload (kg)')
 plt.legend(strLegend)
-plt.savefig('HW2_Payload_vs_TW.png', dpi=300)
+#plt.savefig('HW2_Payload_vs_TW.png', dpi=300)
+plt.show()
 
 
 
