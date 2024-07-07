@@ -14,15 +14,15 @@ import Classes_HW6 as cf
 
 
 # Run through sequence
-rocketData  = # load in the data file
+rocketData  = np.genfromtxt('C:/Users/isaac/Downloads/RocketData.csv', delimiter=',', dtype='f8') # load in the data file
 nDataPointsMass = 100
 
-rockSweep   = 
-mStart      = 
-mPayload    = 
+rockSweep   = np.arange(1,5)
+mStart      = np.zeros((nDataPointsMass, rockSweep.size))
+mPayload    = np.zeros((nDataPointsMass, rockSweep.size))
 mDry        = np.zeros((nDataPointsMass, rockSweep.size))
-dv          = 
-twPhase     = 
+dv          = np.zeros((nDataPointsMass, rockSweep.size))
+twPhase     = np.zeros((nDataPointsMass, rockSweep.size))
 
 mdotRCS     = 3 / 86400     # divide by seconds per day to get rate per second
 
@@ -38,10 +38,10 @@ for jj,indRocket in enumerate(rockSweep):
         
         
         
-        engMain = cf.Engine(HYDROGEN_ISP, THRUST, MIXTURE_RATIO, 'Biprop', 'Cryo') # Fill in values from hydrogen
+        engMain = cf.Engine(450, 25000, 5.5, 'Biprop', 'Cryo') # Fill in values from hydrogen
         engRCS  = cf.Engine(220, 448, 1, 'Monoprop', 'NotCryo')
         
-        dvReq = cf.ApogeeRaise(apogeeOrbit);
+        dvReq = cf.ApogeeRaise(apogeeOrbit)
         
         
         if engMain.strCryo == 'Cryo':
@@ -112,7 +112,7 @@ for jj,indRocket in enumerate(rockSweep):
         # Create the Misison Summary and calculate subsystem masses with payload    
         Mission = cf.MissionSummary(Sequence)
         OxTanks = cf.TankSet("Oxygen", "Stainless", 1, 1.5, 300000, Mission.mPropTotalOx)
-        FuelTanks = cf.TankSet(PROPELLANT_TYPE, "Stainless", 1, 2.05, 300000, Mission.mPropTotalFuel)    # Fill in Hydrogen here
+        FuelTanks = cf.TankSet("Hydrogen", "Stainless", 1, 2.05, 300000, Mission.mPropTotalFuel)    # Fill in Hydrogen here
         MonoTanks = cf.TankSet("MMH", "Al2219", 1,1.08, 300000, Mission.mPropTotalMono)    
         subs = cf.Subsystems(mLaunch, engMain, OxTanks, FuelTanks, MonoTanks, 2000, 'Deployable', 'Large', 8)
         payload = mLaunch - Mission.mPropTotalTotal - subs.mTotalAllowable
@@ -123,7 +123,7 @@ for jj,indRocket in enumerate(rockSweep):
         mPayload[ii, jj] = payload
         mDry[ii,jj] = subs.mTotalAllowable
 
-legString=('Goal', ADD_ROCKETS_LISTED_HERE) # initialize the list for the legend, add in the rocket names
+legString=('Goal', 'Scout', 'Vanguard', 'Juno', 'Nike') # initialize the list for the legend, add in the rocket names
 fig1 = plt.figure()
 plt.plot([2000, 20000], [50, 50], color='k')
 for ii in range(rockSweep.size):                   
@@ -133,10 +133,9 @@ plt.grid()
 plt.xlabel('FIX THIS LABEL (kg)')
 plt.ylabel('Payload (kg)')
 plt.legend((legString))
-
-
-"""      
-
+plt.show()
+     
+'''
 for jj, thrust in enumerate(rockSweep):
     print('{:9.1f} {:9.1f}{:9.1f}{:9.3f}'.format(rockSweep[jj], mFinal[0,jj], dv[0,jj], twPhase[0,jj]))
 # Start the plotting stuff 
@@ -149,4 +148,5 @@ plt.plot(mSeparated, mFinal[:,0])
 plt.xlabel('Launch Mass (kg)')
 plt.ylabel('Final Mass (kg)')
 plt.grid()
-"""
+plt.show()
+'''

@@ -4,7 +4,7 @@
 """
 import numpy as np
 import matplotlib.pyplot as plt
-import Classes as cf
+import Classes_HW6 as cf
 
 ##############################################
 # The actual running portion of the code
@@ -14,17 +14,17 @@ import Classes as cf
 
 
 # Run through sequence
-rocketData  = np.genfromtxt('/Users/jlampariello/Downloads/RocketData.csv', delimiter=',', dtype='f8')
+rocketData  = np.genfromtxt('C:/Users/isaac/Downloads/RocketData.csv', delimiter=',', dtype='f8')
 nDataPointsMass = 100
 
-ispSweep    =  np.array([])# The order of propellant is NTO/MMH (305), RP1 (330), Methane (370), Hydrogen (450)
-mrSweep     = np.array([])# The order of propellant is NTO/MMH, RP1, Methane, Hydrogen 
+ispSweep    =  np.array([305,330,370,450])# The order of propellant is NTO/MMH (305), RP1 (330), Methane (370), Hydrogen (450)
+mrSweep     = np.array([1.8,2.3,2.8,5.5])# The order of propellant is NTO/MMH, RP1, Methane, Hydrogen 
 cryoFlag    = ['Not Cryo', 'Not Cryo', 'Cryo', 'Cryo']
-mStart      = 
-mPayload    = 
-mDry        = 
-dv          = 
-twPhase     = 
+mStart      = np.zeros((nDataPointsMass, ispSweep.size))
+mPayload    = np.zeros((nDataPointsMass, ispSweep.size))
+mDry        = np.zeros((nDataPointsMass, ispSweep.size))
+dv          = np.zeros((nDataPointsMass, ispSweep.size))
+twPhase     = np.zeros((nDataPointsMass, ispSweep.size))
 cost        = np.zeros((nDataPointsMass, ispSweep.size))
 
 
@@ -32,13 +32,13 @@ mdotRCS     = 3 / 86400     # divide by seconds per day to get rate per second
 
 
 # Rocket Information. Index to use and the cost of the rocket
-rocketIndex = # Pick a number that corresponds to the rocket
-cstRocket   = # Put in the cost of the rocket
-fairingDiameter = # Put in the fairing diameter
+rocketIndex = 4 # Pick a number that corresponds to the rocket
+cstRocket   = 150e6 # Put in the cost of the rocket
+fairingDiameter = 7 # Put in the fairing diameter
 
 
 # Number of Prop Tanks and Radius
-nTanks = 2;
+nTanks = 2
 rMax = (fairingDiameter-0.2-0.024-0.15-0.3)/nTanks/2
 
 for jj,ispEngine in enumerate(ispSweep):   
@@ -157,7 +157,7 @@ for jj,ispEngine in enumerate(ispSweep):
         
         
 
-legString=('Goal',) # initialize the list for the legend
+legString=('Goal','NTO/MMH','LOX/RP-1','LOX/Methane','LOX/LH2') # initialize the list for the legend
 fig1, ax1 = plt.subplots()
 ax1.plot([7500, 20000], [750, 750], color='k')
 for ii in range(ispSweep.size):                   
@@ -167,6 +167,7 @@ plt.grid()
 plt.xlabel('Start Mass (kg)')
 plt.ylabel('Payload (kg)')
 plt.legend((legString))
+plt.show()
 
 legString=('NTO/MMH','LOX/RP-1','LOX/Methane','LOX/LH2',) # initialize the list for the legend
 fig2, ax2 = plt.subplots()
@@ -177,6 +178,7 @@ plt.grid()
 plt.xlabel('Start Mass (kg)')
 plt.ylabel('Cost (Millions of Monopoly Dollars)')
 plt.legend((legString))
+plt.show()
 
 
 
