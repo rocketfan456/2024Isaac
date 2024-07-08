@@ -32,9 +32,9 @@ mdotRCS     = 3 / 86400     # divide by seconds per day to get rate per second
 
 
 # Rocket Information. Index to use and the cost of the rocket
-rocketIndex = 4 # Pick a number that corresponds to the rocket
-cstRocket   = 150e6 # Put in the cost of the rocket
-fairingDiameter = 7 # Put in the fairing diameter
+rocketIndex = 2 # Pick a number that corresponds to the rocket
+cstRocket   = 85e6 # Put in the cost of the rocket
+fairingDiameter = 5 # Put in the fairing diameter
 
 
 # Number of Prop Tanks and Radius

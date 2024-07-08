@@ -38,7 +38,7 @@ for jj,indRocket in enumerate(rockSweep):
         
         
         
-        engMain = cf.Engine(450, 25000, 5.5, 'Biprop', 'Cryo') # Fill in values from hydrogen
+        engMain = cf.Engine(350, 35584, 2.8, 'Biprop', 'Not Cryo') # Fill in values from hydrogen
         engRCS  = cf.Engine(220, 448, 1, 'Monoprop', 'NotCryo')
         
         dvReq = cf.ApogeeRaise(apogeeOrbit)
@@ -112,7 +112,7 @@ for jj,indRocket in enumerate(rockSweep):
         # Create the Misison Summary and calculate subsystem masses with payload    
         Mission = cf.MissionSummary(Sequence)
         OxTanks = cf.TankSet("Oxygen", "Stainless", 1, 1.5, 300000, Mission.mPropTotalOx)
-        FuelTanks = cf.TankSet("Hydrogen", "Stainless", 1, 2.05, 300000, Mission.mPropTotalFuel)    # Fill in Hydrogen here
+        FuelTanks = cf.TankSet("Methane", "Stainless", 1, 2.05, 300000, Mission.mPropTotalFuel)    # Fill in Hydrogen here
         MonoTanks = cf.TankSet("MMH", "Al2219", 1,1.08, 300000, Mission.mPropTotalMono)    
         subs = cf.Subsystems(mLaunch, engMain, OxTanks, FuelTanks, MonoTanks, 2000, 'Deployable', 'Large', 8)
         payload = mLaunch - Mission.mPropTotalTotal - subs.mTotalAllowable
@@ -130,7 +130,7 @@ for ii in range(rockSweep.size):
     plt.plot(mStart[:,ii], mPayload[:,ii], linewidth=3.0)
    
 plt.grid()
-plt.xlabel('FIX THIS LABEL (kg)')
+plt.xlabel('Start Mass (kg)')
 plt.ylabel('Payload (kg)')
 plt.legend((legString))
 plt.show()
