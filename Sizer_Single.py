@@ -17,7 +17,7 @@ import Classes_HW6 as cf
 rocketData  = np.genfromtxt('C:/Users/isaac/Downloads/RocketData.csv', delimiter=',', dtype='f8') # load in the data file
 nDataPointsMass = 1
 # Pick your desired launch mass
-mLaunched = [5250]
+mLaunched = [3140]
 
 
 # Replace the values below with the data from the slides

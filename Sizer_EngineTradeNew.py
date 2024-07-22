@@ -63,7 +63,7 @@ diffPropBestResults = [[0]*nDataPointsMass]*np.size(ispEngine)
 for engNumber in range(np.size(ispEngine)):
     for jj,thrEngine in enumerate(thrSweep):   
         # The fifth column of rocketData (index 4) contains the rocket of interest
-        mSeparated  = np.linspace(rocketData[-1,rocketIndex], rocketData[0,rocketIndex], nDataPointsMass)
+        mSeparated  = np.linspace(3000, rocketData[0,rocketIndex], nDataPointsMass)
         for ii,mLaunch in enumerate(mSeparated):
             
             # Interpolate the data from the datafile
@@ -175,7 +175,7 @@ for engNumber in range(np.size(ispEngine)):
     
     legString = ["Goal"]
     fig1, ax1 = plt.subplots()
-    ax1.plot([5000, 10500], [goalPayload, goalPayload], color='k')
+    ax1.plot([3000, 10500], [goalPayload, goalPayload], color='k')
     for ii in range(thrSweep.size):  
         legString.append("{:.0f}".format(thrSweep[ii]) + " N")                 
         ax1.plot(mStart[:,ii], mPayload[:,ii], linewidth=3.0)
@@ -205,7 +205,7 @@ for engNumber in range(np.size(ispEngine)):
 
 legString = ["Goal"]
 fig3, ax3 = plt.subplots()
-ax3.plot([5000, 10500], [407.3, 407.3], color='k')
+ax3.plot([3000, 10500], [378.3, 378.3], color='k')
 for ii in range(np.size(ispEngine)):      
     legString.append(strEngName[ii])                 
     ax3.plot(mStart[:,ii], diffPropBestResults[ii], linewidth=3.0)
