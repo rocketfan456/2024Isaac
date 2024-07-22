@@ -15,22 +15,22 @@ import Classes_HW6 as cf
 
 # Run through sequence
 rocketData  = np.genfromtxt('C:/Users/isaac/Downloads/RocketData.csv', delimiter=',', dtype='f8') # load in the data file
-nDataPointsMass = 100
+nDataPointsMass = 1
+# Pick your desired launch mass
+mLaunched = [5250]
 
 
-# Replace the values below with the data from your chosen engine
-ispEngine    = 330
+# Replace the values below with the data from the slides
+ispSweep    = np.array([330])
+thrEngine   = np.array([22240])
 mrEngine    = np.array([2.3])
-thrEngine   = 22240
 flgPressure     = np.array([1])   # 10 if the engine is pressure fed, 1 if the engine is pump fed
-strOxEngine = "Oxygen"
-strFuelEngine = "RP-1"
-strEngType  = "NotCryo"
+strOxEngine = ["Oxygen"]
+strFuelEngine = ["RP-1"]
+strEngType  = ["NotCryo"]
 flgNew      = np.array([0]) # 0 if the engine exists, 1 if it doesn't
+strEngName  = ["Leprechaun"]  # used for legend
 
-
-# Tank material options
-strTankMat = ["Al2219", "Stainless", "Al-Li"]
 
 
 # Rocket Information. Index to use and the cost of the rocket
@@ -43,20 +43,21 @@ fairingDiameter = 5
 nTanks = 1
 rMax = (fairingDiameter-0.2-0.024-0.15-0.3)/nTanks/2
 
-
 # Target Payload
 landerSize  = "Small"
 goalPayload = 50
 goalPower   = 400
 
 
+strTankMat = "Stainless"
 
-mStart      = np.zeros((nDataPointsMass, len(strTankMat)))
-mPayload    = np.zeros((nDataPointsMass, len(strTankMat)))
-mDry        = np.zeros((nDataPointsMass, len(strTankMat)))
-dv          = np.zeros((nDataPointsMass, len(strTankMat)))
-twPhase     = np.zeros((nDataPointsMass, len(strTankMat)))
-cost     = np.zeros((nDataPointsMass, len(strTankMat)))
+
+mStart      = np.zeros((nDataPointsMass, ispSweep.size))
+mPayload    = np.zeros((nDataPointsMass, ispSweep.size))
+mDry        = np.zeros((nDataPointsMass, ispSweep.size))
+dv          = np.zeros((nDataPointsMass, ispSweep.size))
+twPhase     = np.zeros((nDataPointsMass, ispSweep.size))
+cost     = np.zeros((nDataPointsMass, ispSweep.size))
 
 
 mdotRCS     = 3 / 86400     # divide by seconds per day to get rate per second
@@ -64,9 +65,9 @@ mdotRCS     = 3 / 86400     # divide by seconds per day to get rate per second
 
 
 
-for jj,strMat in enumerate(strTankMat):   
+for jj,ispEngine in enumerate(ispSweep):   
     # The fifth column of rocketData (index 4) contains the rocket of interest
-    mSeparated  = np.linspace(rocketData[-1,rocketIndex], rocketData[0,rocketIndex], nDataPointsMass)
+    mSeparated = mLaunched  
     for ii,mLaunch in enumerate(mSeparated):
         
         # Interpolate the data from the datafile
@@ -75,13 +76,12 @@ for jj,strMat in enumerate(strTankMat):
                
         
         dvReq   = cf.ApogeeRaise(apogeeOrbit)
-        engMain = cf.Engine(ispEngine, thrEngine, mrEngine, 'Biprop', strEngType)
+        engMain = cf.Engine(ispEngine, thrEngine[jj], mrEngine[jj], 'Biprop', strEngType)
         
         
         engRCS  = cf.Engine(220, 448, 1, 'Monoprop', 'NotCryo')
         
-        
-        if engMain.strCryo == 'Cryo':
+        if engMain.strCryo == ['Cryo']:
             # Include chill-in and boiloff only for cryogenic sequence
             mdotOxBoiloff = 5/86400    # divide by seconds per day to get rate per second
             mdotFuelBoiloff = 10/86400  # divide by seconds per day to get rate per second 
@@ -151,20 +151,20 @@ for jj,strMat in enumerate(strTankMat):
         
         # Check tanks based on Isp (since each value is a different propellant
 
-        OxTanks = cf.TankSet(strOxEngine, strMat, nTanks, rMax, 300000*flgPressure, Mission.mPropTotalOx)
-        FuelTanks = cf.TankSet(strFuelEngine, strMat, nTanks, rMax, 300000*flgPressure, Mission.mPropTotalFuel)
+        OxTanks = cf.TankSet(strOxEngine[jj], strTankMat, nTanks, rMax, 300000*flgPressure[jj], Mission.mPropTotalOx)
+        FuelTanks = cf.TankSet(strFuelEngine[jj], strTankMat, nTanks, rMax, 300000*flgPressure[jj], Mission.mPropTotalFuel)
 
         
         # Calculate monopropellant tank size
-        MonoTanks = cf.TankSet("MMH", "Al2219", 1, 2, 300000, Mission.mPropTotalMono)    
+        MonoTanks = cf.TankSet("MMH", "Stainless", 1, 2, 300000, Mission.mPropTotalMono)    
         
         subs = cf.Subsystems(mLaunch, engMain, OxTanks, FuelTanks, MonoTanks, goalPower, 'Deployable', landerSize, 8)
         
         # Determine payload
         payload = mLaunch - Mission.mPropTotalTotal - subs.mTotalAllowable
-        
+
         # Determine Cost
-        costObject = cf.Cost(subs.mTotalAllowable,  thrEngine*flgNew, cstRocket)
+        costObject = cf.Cost(subs.mTotalAllowable,  thrEngine[jj]*flgNew[jj], cstRocket)
         cost[ii,jj] = costObject.costNRETotal
         
         # Save values for plotting        
@@ -176,30 +176,23 @@ for jj,strMat in enumerate(strTankMat):
         
 
 
-legString = ["goalPayload"]
-fig1, ax1 = plt.subplots()
-ax1.plot([7500, 20000], [goalPayload, goalPayload], color='k')
-for ii in range(len(strTankMat)):  
-    legString.append(strTankMat[ii])                 
-    ax1.plot(mStart[:,ii], mPayload[:,ii], linewidth=3.0)
-plt.legend((legString))
+cf.PrintPhasePropData(Sequence)
+print(' ')
+cf.PrintMassData(subs)
+print(' ')
+cf.PrintPropData(Mission)
+print(' ')
+print('{0:30s}{1:11.1f}'.format("Allowable Dry Mass", subs.mTotalAllowable))
+print('{0:30s}{1:11.1f}'.format("Total Propellant", Mission.mPropTotalTotal))
+print('{0:30s}{1:11.1f}'.format("Payload", payload))
+print('{0:30s}{1:11.1f}'.format("Launch Mass", subs.mTotalAllowable+Mission.mPropTotalTotal+payload))
+print(' ')
+print('{0:30s}{1:11.1f}{2:30s}'.format("RE Lander Cost ", np.round((costObject.costRELander/1e6), decimals=2), " M$"))
+print('{0:30s}{1:11.1f}{2:30s}'.format("NRE Lander Cost ", np.round((costObject.costNRELander/1e6), decimals=2), " M$"))
+print('{0:30s}{1:11.1f}{2:30s}'.format("NRE Engine Cost ", np.round((costObject.costNREEngine/1e6), decimals=2), " M$"))
+print('{0:30s}{1:11.1f}{2:30s}'.format("Total Cost ", np.round((costObject.costNRETotal/1e6), decimals=2), " M$"))
+print(' ')
 
-    
-plt.grid()
-plt.xlabel('Start Mass (kg)')
-plt.ylabel('Payload (kg)')
-
-legString = []
-fig2, ax2 = plt.subplots()
-for ii in range(len(strTankMat)):  
-    legString.append(strTankMat[ii])                 
-    ax2.plot(mStart[:,ii], cost[:,ii]/1000000, linewidth=3.0)
-   
-plt.grid()
-plt.xlabel('Start Mass (kg)')
-plt.ylabel('Cost (Millions of Monopoly Dollars)')
-plt.legend((legString))
-plt.show()
 
 
 

@@ -14,37 +14,37 @@ import Classes_HW6 as cf
 
 
 # Run through sequence
-rocketData  = np.genfromtxt('/Users/jlampariello/Downloads/RocketData.csv', delimiter=',', dtype='f8')
+rocketData  = np.genfromtxt('C:/Users/isaac/Downloads/RocketData.csv', delimiter=',', dtype='f8') # load in the data file
 nDataPointsMass = 100
 
 
 # Replace the values below with the data from the slides
-ispSweep    = np.array([305, 330, 470])
-thrEngine   = np.array([2224, 22240, 26000])
-mrEngine    = np.array([1.8, 3.2, 5.5])
-flgPressure     = np.array([10,1, 1])   # 10 if the engine is pressure fed, 1 if the engine is pump fed
-strOxEngine = ["NTO", "Oxygen", "Oxygen"]
-strFuelEngine = ["MMH", "RP-1", "Hydrogen"]
-strEngType  = ["NotCryo", "Cryo", "Cryo"]
-flgNew      = np.array([0, 0, 1]) # 0 if the engine exists, 1 if it doesn't
-strEngName  = ["ND-1", "Leprechaun", "LampEngine1"]  # used for legend
+ispSweep    = np.array([305, 330, 350, 310])
+thrEngine   = np.array([2224, 22240, 35584, 8896])
+mrEngine    = np.array([1.8, 2.3, 2.8, 1.8])
+flgPressure     = np.array([10,1,1,10])   # 10 if the engine is pressure fed, 1 if the engine is pump fed
+strOxEngine = ["NTO", "Oxygen", "Oxygen", "NTO"]
+strFuelEngine = ["MMH", "RP-1", "Methane", "MMH"]
+strEngType  = ["NotCryo", "NotCryo", "Cryo", "NotCryo"]
+flgNew      = np.array([0, 0, 0, 0]) # 0 if the engine exists, 1 if it doesn't
+strEngName  = ["ND-1", "Leprechaun", "Rockne", "Sorin"]  # used for legend
 
 
 
 # Rocket Information. Index to use and the cost of the rocket
-rocketIndex = 3
-cstRocket   = 150000000
-fairingDiameter = 7
+rocketIndex = 2
+cstRocket   = 85e6
+fairingDiameter = 5
 
 
 # Number of Prop Tanks and Radius
-nTanks = 1;
+nTanks = 1
 rMax = (fairingDiameter-0.2-0.024-0.15-0.3)/nTanks/2
 
 # Target Payload
-landerSize  = "Large"
-goalPayload = 750
-goalPower   = 1500
+landerSize  = "Small"
+goalPayload = 50
+goalPower   = 400
 
 
 mStart      = np.zeros((nDataPointsMass, ispSweep.size))
@@ -171,9 +171,9 @@ for jj,ispEngine in enumerate(ispSweep):
         
         
 
-legString=('Goal',strEngName[0],strEngName[1], strEngName[2]) # initialize the list for the legend
+legString=('Goal',strEngName[0],strEngName[1], strEngName[2], strEngName[3]) # initialize the list for the legend
 fig1, ax1 = plt.subplots()
-ax1.plot([7500, 20000], [goalPayload, goalPayload], color='k')
+ax1.plot([5000, 10000], [goalPayload, goalPayload], color='k')
 for ii in range(ispSweep.size):                   
     ax1.plot(mStart[:,ii], mPayload[:,ii], linewidth=3.0)
    
@@ -184,15 +184,16 @@ plt.legend((legString), fontsize=20)
 plt.xticks(fontsize=20)  # X tick labels with the updated font size
 plt.yticks(fontsize=20)  # Y tick labels with the updated font size
 
-legString=(strEngName[0],strEngName[1], strEngName[2]) # initialize the list for the legend
+legString=(strEngName[0],strEngName[1], strEngName[2], strEngName[3]) # initialize the list for the legend
 fig2, ax2 = plt.subplots()
 for ii in range(ispSweep.size):                   
     ax2.plot(mStart[:,ii], cost[:,ii]/1000000, linewidth=3.0)
    
 plt.grid()
 plt.xlabel('Start Mass (kg)')
-plt.ylabel('Cost (Millions of Monopoly Dollars)')
+plt.ylabel('Cost ($M)')
 plt.legend((legString))
+plt.show()
 
 
 
